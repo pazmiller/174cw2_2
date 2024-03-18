@@ -1,0 +1,32 @@
+.decl used(V: symbol, L: symbol)
+.input used
+
+.decl defined(V: symbol, L: symbol)
+.input defined
+
+.decl rhs_const(C: symbol, L:symbol)
+.input rhs_const
+
+.decl rhs_var(V: symbol, L:symbol)
+.input rhs_var
+
+.decl rhs_address(V: symbol, L:symbol)
+.input rhs_address
+
+.decl rhs_deref(V: symbol, L:symbol)
+.input rhs_deref
+
+.decl used_deref(V: symbol, L:symbol)
+.input used_deref
+
+// .decl kill(L:symbol, V:symbol, D:symbol)
+// kill(L, V, D) :- defined(V, L), defined(V, D),
+//                  L != D.
+// kill(L, V, "?") :- defined(V, L).
+
+// .decl gen(L:symbol, V:symbol, L:symbol)
+// gen(L, V, L) :- !defined(V, L).
+
+.decl result(V: symbol, L: symbol)
+.output result
+result(V, L) :- used(V, L), !defined(V,L).

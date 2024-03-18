@@ -1,0 +1,45 @@
+.decl assignment(L: symbol)
+.input assignment
+
+.decl label(L: symbol)
+.input label
+
+.decl variable(V: symbol)
+.input variable
+
+.decl rhs_var(V: symbol, L: symbol)
+.input rhs_var
+
+.decl defined(V: symbol, L: symbol)
+.input defined
+
+.decl flow(L1: symbol, L2: symbol)
+.input flow
+
+.decl used(L: symbol, V: symbol)
+.input used
+
+.decl final(L: symbol)
+.input final 
+
+.decl kill(V:symbol, L:symbol)
+kill(V, L) :-  defined(V, L).
+// kill(V, L, D) :- variable(V), variable(V1),
+//               label(L), label(D), 
+//               V != V1, L != D,
+//               defined(V1, D).
+
+.decl gen(V:symbol, L:symbol)
+gen(V, L) :-  rhs_var(V, L), used(V, L). 
+
+// If a variable is live at the exit
+.decl lv_exit(V:symbol, L:symbol)
+lv_exit(V, L) :- lv_entry(V, L2), flow(L, L2),  !final(L).
+
+.decl lv_entry(V:symbol, L:symbol)
+lv_entry(V, L) :- variable(V), label(L).
+lv_entry(V, L) :- lv_exit(V, L), !kill(V, L), gen(V, L).
+
+.decl result(V:symbol, L:symbol)
+.output result
+result(V, L) :- variable(V), label(L), defined(V, L), !lv_exit(V, L).

@@ -1,0 +1,10 @@
+.decl used(V: symbol, L: symbol)
+.input used
+
+.decl defined(V: symbol, L: symbol)
+.input defined
+
+.decl result(V: symbol, L: symbol)
+.output result
+
+result(V, L) :- used(V, L), !defined(V,L).

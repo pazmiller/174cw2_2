@@ -1,0 +1,18 @@
+.decl label(L:symbol)
+.input label
+
+.decl init(L:symbol)
+.input init
+
+.decl flow(L1:symbol, L2:symbol)
+.input flow
+
+.decl reachable(L1:symbol, L2:symbol)
+reachable(L, L) :- label(L).
+reachable(L1, L2) :- flow(L1, L), reachable(L, L2).
+
+.decl result(L:symbol)
+.output result
+
+// A statement is unreachable if it is not in the set of reachable labels from start
+result(S) :- init(L), label(S), !reachable(L, S).

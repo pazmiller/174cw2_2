@@ -1,0 +1,48 @@
+.decl assignment(L: symbol)
+.input assignment
+
+.decl label(L: symbol)
+.input label
+
+.decl variable(V: symbol)
+.input variable
+
+.decl rhs_var(V: symbol, L: symbol)
+.input rhs_var
+
+.decl defined(V: symbol, L: symbol)
+.input defined
+
+.decl flow(L1: symbol, L2: symbol)
+.input flow
+
+.decl used(L: symbol, V: symbol)
+.input used
+
+.decl final(L: symbol)
+.input fina
+
+.decl call_arg_var(M:symbol, V:symbol, L:symbol)
+.input call_arg_var
+
+.decl call_arg_const(M:symbol, C:symbol, L:symbol)
+.input call_arg_const
+
+.decl var_entry(L: symbol, V:symbol, C:symbol)
+var_entry(L, V, ?) :- init(L), variable(V)
+var_entry(L, V, C) :- flow(L2, L), rhs_var(V, L), defined(V, L).
+var_entry(L, V, C) :- var_exit(L2, V, C).
+
+.decl var_exit(L: symbol, V:symbol, C:symbol)
+
+.decl open(V:symbol, C:symbol, L:symbol)
+open(V, C, L) :- var_entry(L, V, C), !var_exit(L, V, C).
+open(V, C, L) :- M = "open".
+
+
+.decl close(V:symbol, C:symbol, L:symbol)
+open(V, C, L) :- M = "close".
+
+.decl result(V:symbol, L:symbol)
+.output result
+result(V, L) :- variable(V), label(L), defined(V, L), !lv_exit(V, L).

@@ -1,0 +1,32 @@
+.decl assignment(L: symbol)
+.input assignment
+
+.decl label(L: symbol)
+.input label
+
+.decl variable(V: symbol)
+.input variable
+
+.decl rhs_var(V: symbol, L: symbol)
+.input rhs_var
+
+.decl defined(V: symbol, L: symbol)
+.input defined
+
+.decl flow(L1: symbol, L2: symbol)
+.input flow
+
+.decl used(L: symbol, V: symbol)
+.input used
+
+.decl final(L: symbol)
+.input fina
+
+.decl call_arg_var(M:symbol, V:symbol, L:symbol)
+.input call_arg_var
+
+.decl call_arg_const(M:symbol, C:symbol, L:symbol)
+.input call_arg_const
+
+.decl result(V:symbol, L:symbol)
+.output result
