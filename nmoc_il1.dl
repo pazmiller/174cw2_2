@@ -34,15 +34,23 @@ var_entry(L, V, C) :- flow(L2, L), rhs_var(V, L), defined(V, L).
 var_entry(L, V, C) :- var_exit(L2, V, C).
 
 .decl var_exit(L: symbol, V:symbol, C:symbol)
+variable_exit(L, V, C) :- variable_entry(L, V, C), !defined(V, L).
 
 .decl open(V:symbol, C:symbol, L:symbol)
-open(V, C, L) :- var_entry(L, V, C), !var_exit(L, V, C).
+open(V, C, L) :- call_arg_const(M, C, L), M = "open".
+open(V, C, L) :- call_arg_var(M, V, L), M = "open", var_entry(L, V, C).
 open(V, C, L) :- M = "open".
 
 
 .decl close(V:symbol, C:symbol, L:symbol)
-open(V, C, L) :- M = "close".
+close(V, C, L) :- M = "close".
 
 .decl result(V:symbol, L:symbol)
 .output result
-result(V, L) :- variable(V), label(L), defined(V, L), !lv_exit(V, L).
+result(V, L) :- open(V, C, L), !close(V, C, L).
+result(L) :- close(V, C, L1), close(V, C1, L1), C != C1, open(_, C, L).
+result(L) :- close(V, C, L1), close(V, C1, L1), C != C1, open(_, C1, L).
+// Function open(x) with one argument does not have 
+// a matching call of the function close(...) with one argument
+// if along at least one path to the final statement close(...)
+// is not called with the same value as the argument.
